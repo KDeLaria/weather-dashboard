@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <title>Code Quiz</title>
+    <title>Weather Dashboard</title>
 </head>
+
 <body>
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+    <main>
+        <p>Enter a city name and select a state to view the weather.</p>
+        <form method="post" id="cityForm" name="cityForm">
+            <label for="cityInput">City:</label>
+            <input type="text" id="cityInput" name="cityInput">
+            <!-- <br>
+    <label for="stateInput">State:</label>
     
+    <select name="stateInput" id="stateInput">
+        <selection name="" id="">moo</selection>
+        <selection name="" id="">timmah</selection>
+    </select> -->
+            <button>Search</button>
+        </form>
+        <div id="currentWeather">
+            <img id="currentIcon">
+        </div>
+        <div id="fiveDayForcast">
+            <div id="day-1-weather">
+                <img id="day-1-icon">
+            </div>
+            <div id="day-2-weather">
+                <img id="day-2-icon">
+            </div>
+            <div id="day-3-weather">
+                <img id="day-3-icon">
+            </div>
+            <div id="day-4-weather">
+                <img id="day-4-icon">
+            </div>
+            <div id="day-5-weather">
+                <img id="day-5-icon">
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+        integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
     <script src="./assets/js/script.js"></script>
 </body>
+
 </html>
