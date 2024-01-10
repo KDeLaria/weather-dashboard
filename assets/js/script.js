@@ -10,22 +10,31 @@ $("#cityForm").on("submit", buildRequestUrl);
 
 function buildRequestUrl(event) {
     event.preventDefault();
-    const city = $("#cityInput").val() + ",US";
-    console.log(`City input: ${city}`);
+    $(".icon").css("display", "block"); // Display images
+
+    const city = $("#cityInput").val() + ",us";
     if (city !== "") {
         requestUrl = requestUrl + city;
         getWeatherData();
     }
 }
 
-function ifCityExists(newCity) {
+function saveCity(newCity) {
+    (cities !== null) ? cities.push(newCity) : cities = [newCity];
+    localStorage.setItem("myCity", JSON.stringify(cities));
+    ///////poplate city buttons function call
+}
+
+function ifCityExists(searchedCity) {
     cities = JSON.parse(localStorage.getItem("myCity"));
     if (cities !== null) {
-        cities.forEach(city => {
-            if (city === newCity) {
+        for (let i = 0; i < cities.length; i++) {
+            console.log(`cityX: ${cities[i]}
+            searchedCity: ${searchedCity}`);
+            if (cities[i] === searchedCity) {
                 return true;
             }
-        });
+        }
     }
     return false;
 }
@@ -34,54 +43,56 @@ async function getWeatherData() {
     const response = await fetch(requestUrl);
     const weatherData = await response.json();
 
-    let timeStamp = weatherData.dt//dayjs(weatherData.dt).format("MMMM D, YYYY");
-    let icon = weatherData.weather[0].icon.toString();
-    let temperature = weatherData.main.temp.toString();
-    let humidity = weatherData.main.humidity.toString();
-    let windSpeed = weatherData.wind.speed.toString();
-    let latitude = weatherData.coord.lat;
-    let longitude = weatherData.coord.lon;
-    /// save city name from api to storage and run ifCityExists function then save in storage
-    /// and create a new button that loads for the stored cities
+    let timeStamp = dayjs(weatherData.dt).format("MMMM D, YYYY");
+    const icon = weatherData.weather[0].icon;
+    const temperature = weatherData.main.temp;
+    const humidity = weatherData.main.humidity;
+    const windSpeed = weatherData.wind.speed;
+    const latitude = weatherData.coord.lat;
+    const longitude = weatherData.coord.lon;
+    
+    (ifCityExists(weatherData.name)) ? null : saveCity(weatherData.name);
 
     getFiveDayForcast(latitude, longitude);   ////5 day forcast
-
-    console.log(weatherData);
-    $("#currentIcon").attr("src", iconUrl + icon + iconMedium);
-    const wxHeading = $("<h3>").text(timeStamp);
-    $("#currentWeather").append(wxHeading);
-    $("#currentWeather").text(`\nTemperature: ${temperature}°F
-    \nHumidity: ${humidity}%
-    \nWind Speed: ${windSpeed}mph`);
+    console.log(iconUrl + icon + iconLarge); ////////////////////////////////////////////////////////////
+    //$("#currentIcon").attr("src", iconUrl + icon + iconLarge);
+    $("#currentWeather").html(`<h2>${dayjs().format("MMMM D, YYYY")}</h2>\n
+    <br /><br /><b>Temperature:</b> ${temperature}°F\n
+    <br /><br /><b>Humidity:</b> ${humidity}%\n
+    <br /><br /><b>Wind Speed:</b> ${windSpeed}mph`);
 
 }
 
 async function getFiveDayForcast(lat, lon) {
     const fiveDayUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}` +
-        "&units=imperial&lang=en&cnt=5";
+        "&units=imperial&lang=en";
     const fiveDayResponse = await fetch(fiveDayUrl);
     const weather = await fiveDayResponse.json();
-    console.log(weather);
     const prefix = "#day-";
     const iconSuffix = "-icon";
-    const suffix = "-weather"
+    const suffix = "-weather";
+    const today = dayjs();
 
-    let wxList = weather.list;
+    const wxList = weather.list;
 
-    for (let i = 0; i > weather.list.length; i++) {
-        console.log(`DAY ${i}
-        iconDIV: ${prefix + (i + 1) + iconSuffix}
-        wxDIV: ${prefix + (i + 1) + suffix}`)
-        $(prefix + (i + 1) + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
-        $(prefix + (i + 1) + suffix).text(`<h3>${dayjs(wxList[i].dt).format("MMMM D, YYYY")}</h3>
-        Temperature: ${wxList[i].temp.toString()}°F
-        Humidity: ${wxList[i].humidity.toString()}%
-        Wind Speed: ${wxList[i].wind.speed.toString()}mph`);
-        
-        console.log(`DAT ${i}
-        timeStamp: ${wxList[i].dt}
-        temerature: ${wxList[i].temp}
-        humidity: ${wxList[i].humidity}
-        windspeed: ${wxList[i].wind.speed}`)
+    let dayX = 1;
+
+    for (let i = 0; i < wxList.length; i++) {
+        if (i % 8 === 0) { // grabs only 5 results of the 40
+            console.log(iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);////////////////////////////////////////
+            //$(prefix + dayX + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
+            $(prefix + dayX + suffix).html(`<h3>${today.add(dayX - 1, "day").format
+                ("MMMM D, YYYY")}</h3>\n
+                <br /><b>Temperature:</b> ${wxList[i].main.temp}°F\n
+                <br /><b>Humidity:</b> ${wxList[i].main.humidity}%\n
+                <br /><b>Wind Speed:</b> ${wxList[i].wind.speed}mph`);
+
+            console.log(`DAY ${dayX}
+            timeStamp: ${wxList[i].dt}
+            temerature: ${wxList[i].main.temp}
+            humidity: ${wxList[i].main.humidity}
+            windspeed: ${wxList[i].wind.speed}`);
+            dayX++;
+        }
     }
 }
