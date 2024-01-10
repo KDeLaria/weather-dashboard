@@ -4,18 +4,31 @@ requestUrl = requestUrl + apiKey + "&q=";
 const iconUrl = "https://openweathermap.org/img/wn/";
 const iconMedium = "@2x.png";
 const iconLarge = "@4x.png";
+const cityButton = $(".city-button");
 let cities = [];
 
-$("#cityForm").on("submit", buildRequestUrl);
 
-getSavedCities ();
+$("#cityForm").on("submit", getWXInfo);
+cityButton.on("click", buildRequestUrl);
 
-function buildRequestUrl(event) {
-    event.preventDefault();
+
+getSavedCities();
+
+function buildRequestUrl() {/////////////////////////////////////
+    console.log("click event")
     $(".icon").css("display", "block"); // Display images
+    const clickedButton = $(this);
+    console.log(`${clickedButton.attr("id")} was clicked`)
+    requestUrl = requestUrl + clickedButton.attr("id");
+    getWeatherData();
+}///////////////////////////////////////////////////////////////////////
+
+function getWXInfo(event) {
+    event.preventDefault();
 
     let city = $("#cityInput").val() + ",us";
     if (city !== "") {
+        $(".icon").css("display", "block"); // Display images
         requestUrl = requestUrl + city;
         getWeatherData();
     }
@@ -27,12 +40,12 @@ function saveCity(newCity) {
     getSavedCities();
 }
 
-function getSavedCities () {
+function getSavedCities() {
     $("cities").html = "";
     cities = JSON.parse(localStorage.getItem("myCity"));
     for (let i = 0; i < cities.length; i++) {
-        const cityButton = $("<button>").attr("id", cities[i]).text(cities[i]);
-        $("#cities").append(cityButton);
+        const ctyButton = $("<button>").attr("id", cities[i]).text(cities[i]).addClass("city-button");
+        $("#cities").append(ctyButton);
     }
 }
 
@@ -61,7 +74,7 @@ async function getWeatherData() {
     const windSpeed = weatherData.wind.speed;
     const latitude = weatherData.coord.lat;
     const longitude = weatherData.coord.lon;
-    
+
     (ifCityExists(weatherData.name)) ? null : saveCity(weatherData.name);
 
     getFiveDayForcast(latitude, longitude);   ////5 day forcast
