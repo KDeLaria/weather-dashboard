@@ -8,11 +8,13 @@ let cities = [];
 
 $("#cityForm").on("submit", buildRequestUrl);
 
+getSavedCities ();
+
 function buildRequestUrl(event) {
     event.preventDefault();
     $(".icon").css("display", "block"); // Display images
 
-    const city = $("#cityInput").val() + ",us";
+    let city = $("#cityInput").val() + ",us";
     if (city !== "") {
         requestUrl = requestUrl + city;
         getWeatherData();
@@ -22,7 +24,16 @@ function buildRequestUrl(event) {
 function saveCity(newCity) {
     (cities !== null) ? cities.push(newCity) : cities = [newCity];
     localStorage.setItem("myCity", JSON.stringify(cities));
-    ///////poplate city buttons function call
+    getSavedCities();
+}
+
+function getSavedCities () {
+    $("cities").html = "";
+    cities = JSON.parse(localStorage.getItem("myCity"));
+    for (let i = 0; i < cities.length; i++) {
+        const cityButton = $("<button>").attr("id", cities[i]).text(cities[i]);
+        $("#cities").append(cityButton);
+    }
 }
 
 function ifCityExists(searchedCity) {
@@ -54,8 +65,7 @@ async function getWeatherData() {
     (ifCityExists(weatherData.name)) ? null : saveCity(weatherData.name);
 
     getFiveDayForcast(latitude, longitude);   ////5 day forcast
-    console.log(iconUrl + icon + iconLarge); ////////////////////////////////////////////////////////////
-    //$("#currentIcon").attr("src", iconUrl + icon + iconLarge);
+    $("#currentIcon").attr("src", iconUrl + icon + iconLarge);
     $("#currentWeather").html(`<h2>${dayjs().format("MMMM D, YYYY")}</h2>\n
     <br /><br /><b>Temperature:</b> ${temperature}°F\n
     <br /><br /><b>Humidity:</b> ${humidity}%\n
@@ -79,8 +89,7 @@ async function getFiveDayForcast(lat, lon) {
 
     for (let i = 0; i < wxList.length; i++) {
         if (i % 8 === 0) { // grabs only 5 results of the 40
-            console.log(iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);////////////////////////////////////////
-            //$(prefix + dayX + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
+            $(prefix + dayX + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
             $(prefix + dayX + suffix).html(`<h3>${today.add(dayX - 1, "day").format
                 ("MMMM D, YYYY")}</h3>\n
                 <br /><b>Temperature:</b> ${wxList[i].main.temp}°F\n
