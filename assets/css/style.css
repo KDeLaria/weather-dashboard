@@ -1,4 +1,4 @@
-body {
+/* body {
     background-color: black;
     color: white;
 }
@@ -11,9 +11,6 @@ header {
     text-align: center;
 }
 
-#cityForm {
-    
-}
 
 #fiveDayForcast {
     display: flex;
@@ -26,6 +23,8 @@ header {
     flex-direction: column;
 }
 
+
+
 .small-forecast {
     display: flex;
     flex-direction: row;
@@ -33,7 +32,7 @@ header {
 
 .city-button {
     display: flex;
-} 
+}  */
 
 .icon {
     display: none;

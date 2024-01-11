@@ -12,6 +12,7 @@ $("#cityForm").on("submit", getWXInfo);
 $(".city-button").on("click", getSavedCityWX);
 
 
+// Prepares the request url from the city button
 function getSavedCityWX(event) {
     event.preventDefault();
 
@@ -20,43 +21,45 @@ function getSavedCityWX(event) {
     getWeatherData();
 }
 
+// Prepares the request url from the input text
 function getWXInfo(event) {
     event.preventDefault();
-    state = $("#cityInput").val().split(",")[1];
-    let city = $("#cityInput").val() + ",us";
+    state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
+    let city = $("#cityInput").val().trim() + ",us";
     if (city !== "") {
-        console.log("city entered:" + city);
         requestUrl = requestUrl + city;
         getWeatherData();
-        $("#cityInput").val("");
     }
 }
 
+// Stores the city on the user's machine
 function saveCity(newCity) {
     (cities !== null) ? cities.push(newCity) : cities = [newCity];
     localStorage.setItem("myCity", JSON.stringify(cities));
     getSavedCities();
 }
 
+// Sets up buttons for saved cities
 function getSavedCities() {
-    $("cities").html = "";
+    $("#cities").html("");
     cities = JSON.parse(localStorage.getItem("myCity"));
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
-            const ctyButton = $("<button>").attr("id", cities[i] +","+state).text(cities[i]).addClass("city-button");
+            let ctyButton = $("<button>");
+            ctyButton.attr("id", cities[i]).text(cities[i]).addClass("city-button");
             $("#cities").append(ctyButton);
         }
         $(".city-button").on("click", getSavedCityWX);
     }
 }
 
+// Checks to see if the city is stored already
 function ifCityExists(searchedCity) {
     cities = JSON.parse(localStorage.getItem("myCity"));
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
-            console.log(`cityX: ${cities[i]}
-            searchedCity: ${searchedCity}`);
-            if (cities[i] === searchedCity) {
+            // Checks only city names
+            if (cities[i].split(",")[0] === searchedCity.split(",")[0]) {
                 return true;
             }
         }
@@ -64,10 +67,12 @@ function ifCityExists(searchedCity) {
     return false;
 }
 
+// Gathers the current forecast 
 async function getWeatherData() {
     try {
         let response = await fetch(requestUrl);
         let weatherData = await response.json();
+        console.log(weatherData);
 
         let timeStamp = dayjs(weatherData.dt).format("MMMM D, YYYY");
         let icon = weatherData.weather[0].icon;
@@ -76,8 +81,10 @@ async function getWeatherData() {
         let windSpeed = weatherData.wind.speed;
         let latitude = weatherData.coord.lat;
         let longitude = weatherData.coord.lon;
+        $("#main-forecast").val("MOOOO")//weatherData.name);  ///
+        $("#cityInput").val("");
 
-        (ifCityExists(weatherData.name)) ? null : saveCity(weatherData.name);
+        (ifCityExists(weatherData.name +","+state)) ? null : saveCity(weatherData.name +","+state);
 
         getFiveDayForcast(latitude, longitude);   ////5 day forcast
         $("#currentIcon").attr("src", iconUrl + icon + iconLarge);
@@ -91,6 +98,7 @@ async function getWeatherData() {
     }
 }
 
+// Gathers and displays the 5 day forecast
 async function getFiveDayForcast(lat, lon) {
     try {
         let fiveDayUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}` +
@@ -115,11 +123,6 @@ async function getFiveDayForcast(lat, lon) {
                 <br /><b>Humidity:</b> ${wxList[i].main.humidity}%\n
                 <br /><b>Wind Speed:</b> ${wxList[i].wind.speed}mph`);
 
-                console.log(`DAY ${dayX}
-            timeStamp: ${wxList[i].dt}
-            temerature: ${wxList[i].main.temp}
-            humidity: ${wxList[i].main.humidity}
-            windspeed: ${wxList[i].wind.speed}`);
                 dayX++;
             }
         }
