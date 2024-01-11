@@ -72,7 +72,6 @@ async function getWeatherData() {
     try {
         let response = await fetch(requestUrl);
         let weatherData = await response.json();
-        console.log(weatherData);
 
         let timeStamp = dayjs(weatherData.dt).format("MMMM D, YYYY");
         let icon = weatherData.weather[0].icon;
