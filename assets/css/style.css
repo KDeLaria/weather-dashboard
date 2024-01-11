@@ -3,6 +3,38 @@ body {
     color: white;
 }
 
+main {
+    display: flex;
+}
+
+header {
+    text-align: center;
+}
+
+#cityForm {
+    
+}
+
+#fiveDayForcast {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-end;
+}
+
+#cities {
+    display: flex;
+    flex-direction: column;
+}
+
+.small-forecast {
+    display: flex;
+    flex-direction: row;
+}
+
+.city-button {
+    display: flex;
+} 
+
 .icon {
     display: none;
 }
