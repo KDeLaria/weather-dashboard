@@ -23,17 +23,9 @@ header {
     flex-direction: column;
 }
 
-
-
-.small-forecast {
-    display: flex;
-    flex-direction: row;
-}
-
 .city-button {
     display: flex;
 }  */
-
-.icon {
+.icon, #main-forecast, .small-forecast{
     display: none;
 }

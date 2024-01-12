@@ -16,8 +16,8 @@
     <main class="container-fluid">
         <div class="row">
             <div class="col-4">
-                <p>Enter a city name and select a state to view the weather.</p>
-                <form method="post" id="cityForm" name="cityForm" class="form">
+                <p>Enter a city name and state to view the weather.</p>
+                <form method="post" id="cityForm" name="cityForm" class="form mb-25">
                     <label for="cityInput">City:</label>
                     <input type="text" id="cityInput" name="cityInput">
                     <!-- <br>
@@ -37,13 +37,10 @@
 
             <div class="col-8">
                 <div class="row">
-                    <div id="main-forecast">
-                        <h2 id="current-city"></h2>
+                    <div id="main-forecast" class="card dark bg-dark text-light">
                         <div class="col-6">
                             <img id="currentIcon" alt="weather icon" class="icon">
-                        </div>
-
-                        <div class="col-6">
+                            <h2 id="current-city"></h2>  
                             <div id="currentWeather">
 
                             </div>
@@ -56,33 +53,33 @@
             <div class="row">
                 <div class="col-2"></div>
                 <div class="col-2">
-                    <div class="small-forecast">
+                    <div class="small-forecast card dark bg-dark text-light">
                         <img id="day-1-icon" alt="weather icon" class="icon">
                         <div id="day-1-weather"></div>
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="small-forecast">
+                    <div class="small-forecast card dark bg-dark text-light">
                         <img id="day-2-icon" alt="weather icon" class="icon">
                         <div id="day-2-weather"></div>
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="small-forecast">
+                    <div class="small-forecast card dark bg-dark text-light">
                         <img id="day-3-icon" alt="weather icon" class="icon">
                         <div id="day-3-weather"></div>
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="small-forecast">
+                    <div class="small-forecast card dark bg-dark text-light">
                         <img id="day-4-icon" alt="weather icon" class="icon">
                         <div id="day-4-weather"></div>
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="small-forecast">
+                    <div class="small-forecast card bg-dark text-light">
                         <img id="day-5-icon" alt="weather icon" class="icon">
-                        <div id="day-5-weather"></div>
+                        <div id="day-5-weather" class="m-10"></div>
                     </div>
                 </div>
             </div>

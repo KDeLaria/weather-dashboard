@@ -1,9 +1,9 @@
 const apiKey = "0d719d0af3d2ab63a7bcf67465e11d42";
-let requestUrl = "https://api.openweathermap.org/data/2.5/weather?units=imperial&lang=en&appid=";
-requestUrl = requestUrl + apiKey + "&q=";
+const baseUrl = "https://api.openweathermap.org/data/2.5/weather?units=imperial&lang=en&appid=" + apiKey + "&q=";
 const iconUrl = "https://openweathermap.org/img/wn/";
 const iconMedium = "@2x.png";
 const iconLarge = "@4x.png";
+let requestUrl;
 let cities = [];
 let state;
 
@@ -13,22 +13,33 @@ $(".city-button").on("click", getSavedCityWX);
 
 
 // Prepares the request url from the city button
-function getSavedCityWX(event) {
-    event.preventDefault();
-
+function getSavedCityWX() {
     state = $(this).attr("id").split(",")[1];
-    requestUrl = requestUrl + $(this).attr("id");
+    requestUrl = baseUrl + $(this).attr("id") + ",US";
     getWeatherData();
 }
 
 // Prepares the request url from the input text
 function getWXInfo(event) {
     event.preventDefault();
-    state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
-    let city = $("#cityInput").val().trim() + ",us";
-    if (city !== "") {
-        requestUrl = requestUrl + city;
-        getWeatherData();
+    if ($("#cityInput").val() !== "") {
+        state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
+        let city = $("#cityInput").val().trim() + ",US";
+        if (city !== "") {
+            requestUrl = baseUrl + city;
+            getWeatherData();
+        }
+    }
+}
+
+// Clears the weather data
+function clearLayout() {
+    $("#cityInput").val("");
+    $("#currentWeather").html("");
+    $("#current-city").text("");
+    for (let i = 1; i < 6; i++) {
+
+        $("#day-" + i + "-weather").html("");
     }
 }
 
@@ -73,6 +84,8 @@ async function getWeatherData() {
         let response = await fetch(requestUrl);
         let weatherData = await response.json();
 
+        requestUrl = ""; ////////////////////////////////////////////////////////////////////////////////
+
         let timeStamp = dayjs(weatherData.dt).format("MMMM D, YYYY");
         let icon = weatherData.weather[0].icon;
         let temperature = weatherData.main.temp;
@@ -81,17 +94,23 @@ async function getWeatherData() {
         let latitude = weatherData.coord.lat;
         let longitude = weatherData.coord.lon;
 
-        $("#current-city").text(weatherData.name);
-        $("#cityInput").val("");
+        clearLayout();
 
-        (ifCityExists(weatherData.name +","+state)) ? null : saveCity(weatherData.name +","+state);
+        $("#current-city").text(weatherData.name);
+
+        if (!(ifCityExists(weatherData.name + "," + state))) {
+            saveCity(weatherData.name + "," + state);
+        }
 
         getFiveDayForcast(latitude, longitude);   ////5 day forcast
         $("#currentIcon").attr("src", iconUrl + icon + iconLarge);
         $("#currentWeather").html(`<h3>${dayjs().format("MMMM D, YYYY")}</h3>\n
-    <br /><br /><b>Temperature:</b> ${temperature}°F\n
-    <br /><br /><b>Humidity:</b> ${humidity}%\n
-    <br /><br /><b>Wind Speed:</b> ${windSpeed}mph`);
+        <br /><br /><b>Temperature:</b> ${temperature}°F\n
+        <br /><br /><b>Humidity:</b> ${humidity}%\n
+        <br /><br /><b>Wind Speed:</b> ${windSpeed}mph`);
+
+        $("#main-forecast").css("display", "block");
+
     }
     catch (error) {
         console.log(error);
@@ -125,7 +144,8 @@ async function getFiveDayForcast(lat, lon) {
                 dayX++;
             }
         }
-    $(".icon").css("display", "flex"); // Display images
+        $(".small-forecast").css("display", "block");
+        $(".icon").css("display", "block"); // Display images
     }
     catch (error) {
         console.log(error);
