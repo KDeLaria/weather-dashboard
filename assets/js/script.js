@@ -109,6 +109,7 @@ async function getWeatherData() {
         <br /><br /><b>Humidity:</b> ${humidity}%\n
         <br /><br /><b>Wind Speed:</b> ${windSpeed}mph`);
 
+        $("#five-day-title").css("display", "block");
         $("#main-forecast").css("display", "block");
 
     }

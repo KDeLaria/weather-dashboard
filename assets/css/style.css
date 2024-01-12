@@ -26,6 +26,6 @@ header {
 .city-button {
     display: flex;
 }  */
-.icon, #main-forecast, .small-forecast{
+.icon, #main-forecast, #five-day-title, .small-forecast{
     display: none;
 }
