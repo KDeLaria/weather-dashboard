@@ -57,7 +57,7 @@ function getSavedCities() {
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
             let ctyButton = $("<button>");
-            ctyButton.attr("id", cities[i]).text(cities[i]).addClass("city-button");
+            ctyButton.attr("id", cities[i]).text(cities[i]).attr("class","city-button btn bg-secondary text-light border");
             $("#cities").append(ctyButton);
         }
         $(".city-button").on("click", getSavedCityWX);
