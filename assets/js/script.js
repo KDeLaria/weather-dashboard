@@ -22,9 +22,11 @@ function getSavedCityWX() {
 // Prepares the request url from the input text
 function getWXInfo(event) {
     event.preventDefault();
+    // If the city input is not an empty string the city is formatted for the url
     if ($("#cityInput").val() !== "") {
         state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
         let city = $("#cityInput").val().trim() + ",US";
+        // 
         if (city !== "") {
             requestUrl = baseUrl + city;
             getWeatherData();
@@ -37,6 +39,7 @@ function clearLayout() {
     $("#cityInput").val("");
     $("#currentWeather").html("");
     $("#current-city").text("");
+    // Clears the 5 day forecast
     for (let i = 1; i < 6; i++) {
 
         $("#day-" + i + "-weather").html("");
@@ -54,6 +57,7 @@ function saveCity(newCity) {
 function getSavedCities() {
     $("#cities").html("");
     cities = JSON.parse(localStorage.getItem("myCity"));
+    // If the cities array from local storage is not empty a new button will be made for that city
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
             let ctyButton = $("<button>");
@@ -98,6 +102,7 @@ async function getWeatherData() {
 
         $("#current-city").text(weatherData.name);
 
+        // If the city exists on the server the city name will be stored on the local machine
         if (!(ifCityExists(weatherData.name + "," + state))) {
             saveCity(weatherData.name + "," + state);
         }
@@ -134,6 +139,7 @@ async function getFiveDayForcast(lat, lon) {
 
         let dayX = 1;
 
+        // Displays the forecast for each day
         for (let i = 0; i < wxList.length; i++) {
             if (i % 8 === 0) { // grabs only 5 results of the 40
                 $(prefix + dayX + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
