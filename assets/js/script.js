@@ -19,7 +19,7 @@ function getSavedCityWX() {
         requestUrl = baseUrl + $(this).attr("id") + ",US";
     }
     else {
-        requestUrl = baseUrl + $(this).attr("id");
+        requestUrl = baseUrl + $(this).attr("id") + ",US";
     }
     getWeatherData();
 }
@@ -39,7 +39,7 @@ function getWXInfo(event) {
             }
         }
         else {
-            requestUrl = baseUrl + $("#cityInput").val();
+            requestUrl = baseUrl + $("#cityInput").val() + ",US";
             getWeatherData();
         }
     }
