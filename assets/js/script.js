@@ -5,7 +5,7 @@ const iconMedium = "@2x.png";
 const iconLarge = "@4x.png";
 let requestUrl;
 let cities = [];
-let state;
+let state = "";
 
 getSavedCities();
 $("#cityForm").on("submit", getWXInfo);
@@ -14,8 +14,13 @@ $(".city-button").on("click", getSavedCityWX);
 
 // Prepares the request url from the city button
 function getSavedCityWX() {
-    state = $(this).attr("id").split(",")[1];
-    requestUrl = baseUrl + $(this).attr("id") + ",US";
+    if ($(this).attr("id").includes(",")) {
+        state = $(this).attr("id").split(",")[1];
+        requestUrl = baseUrl + $(this).attr("id") + ",US";
+    }
+    else {
+        requestUrl = baseUrl + $(this).attr("id");
+    }
     getWeatherData();
 }
 
@@ -24,11 +29,17 @@ function getWXInfo(event) {
     event.preventDefault();
     // If the city input is not an empty string the city is formatted for the url
     if ($("#cityInput").val() !== "") {
-        state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
-        let city = $("#cityInput").val().trim() + ",US";
-        // 
-        if (city !== "") {
-            requestUrl = baseUrl + city;
+        if ($("#cityInput").val().includes(",")) {
+            state = $("#cityInput").val().split(",")[1].trim().toUpperCase();
+            let city = $("#cityInput").val().trim() + ",US";
+            // 
+            if (city !== "") {
+                requestUrl = baseUrl + city;
+                getWeatherData();
+            }
+        }
+        else {
+            requestUrl = baseUrl + $("#cityInput").val();
             getWeatherData();
         }
     }
@@ -61,7 +72,7 @@ function getSavedCities() {
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
             let ctyButton = $("<button>");
-            ctyButton.attr("id", cities[i]).text(cities[i]).attr("class","city-button btn bg-dark text-light border");
+            ctyButton.attr("id", cities[i]).text(cities[i]).attr("class", "city-button btn bg-dark text-light border");
             $("#cities").append(ctyButton);
         }
         $(".city-button").on("click", getSavedCityWX);
@@ -74,8 +85,25 @@ function ifCityExists(searchedCity) {
     if (cities !== null) {
         for (let i = 0; i < cities.length; i++) {
             // Checks only city names
-            if (cities[i].split(",")[0] === searchedCity.split(",")[0]) {
+            if (cities[i].includes(",") && searchedCity.includes(",")) {
+                if (cities[i].split(",")[0] === searchedCity.split(",")[0]) {
+                    return true;
+                }
+            }
+            else if (cities[i].includes(",")) {
+                if (cities[i].split(",")[0] === searchedCity) {
+                    return true;
+                }
+            }
+            else if (searchedCity.includes(",")) {
+                if (cities[i]  === searchedCity.split(",")[0]) {
                 return true;
+            }
+            }
+            else {
+                if (cities[i]  === searchedCity) {
+                return true;
+            }
             }
         }
     }
@@ -103,8 +131,16 @@ async function getWeatherData() {
         $("#current-city").text(weatherData.name);
 
         // If the city exists on the server the city name will be stored on the local machine
-        if (!(ifCityExists(weatherData.name + "," + state))) {
-            saveCity(weatherData.name + "," + state);
+        if (state !== "") {
+            if (!(ifCityExists(weatherData.name + ", " + state))) {
+                saveCity(weatherData.name + ", " + state);
+                state = ""; ////////clears the state object
+            }
+        }
+        else {
+            if (!(ifCityExists(weatherData.name))) {
+                saveCity(weatherData.name);
+            }
         }
 
         getFiveDayForcast(latitude, longitude);   ////5 day forcast
