@@ -29,3 +29,7 @@ header {
 .icon, #main-forecast, #five-day-title, .small-forecast{
     display: none;
 }
+
+button {
+    border-radius: 5px;
+}

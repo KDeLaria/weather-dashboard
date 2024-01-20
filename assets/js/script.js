@@ -146,9 +146,9 @@ async function getWeatherData() {
         getFiveDayForcast(latitude, longitude);   ////5 day forcast
         $("#currentIcon").attr("src", iconUrl + icon + iconLarge);
         $("#currentWeather").html(`<h3>${dayjs().format("MMMM D, YYYY")}</h3>\n
-        <br><b>Temperature:</b> ${temperature}°F\n
-        <br><b>Humidity:</b> ${humidity}%\n
-        <br><b>Wind Speed:</b> ${windSpeed}mph`);
+        <br><b>Temperature:</b> ${temperature} °F\n
+        <br><b>Humidity:</b> ${humidity} %\n
+        <br><b>Wind Speed:</b> ${windSpeed} mph`);
 
         $("#five-day-title").css("display", "block");
         $("#main-forecast").css("display", "block");
@@ -180,9 +180,9 @@ async function getFiveDayForcast(lat, lon) {
             if (i % 8 === 0) { // grabs only 5 results of the 40
                 $(prefix + dayX + iconSuffix).attr("src", iconUrl + wxList[i].weather[0].icon.toString() + iconMedium);
                 $(prefix + dayX + suffix).html(`<h4>${today.add(dayX - 1, "day").format("MMMM D, YYYY")}</h4>\n
-                <br><b>Temperature:</b> ${wxList[i].main.temp}°F\n
-                <br><b>Humidity:</b> ${wxList[i].main.humidity}%\n
-                <br><b>Wind Speed:</b> ${wxList[i].wind.speed}mph`);
+                <br><b>Temperature:</b> ${wxList[i].main.temp} °F\n
+                <br><b>Humidity:</b> ${wxList[i].main.humidity} %\n
+                <br><b>Wind Speed:</b> ${wxList[i].wind.speed} mph`);
 
                 dayX++;
             }
