@@ -33,3 +33,10 @@ header {
 button {
     border-radius: 5px;
 }
+
+footer {
+    height: 50px;
+}
+.card {
+    padding: 10px;
+}
