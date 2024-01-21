@@ -155,7 +155,7 @@ async function getWeatherData() {
 
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -191,6 +191,6 @@ async function getFiveDayForcast(lat, lon) {
         $(".icon").css("display", "block"); // Display images
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
