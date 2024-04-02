@@ -1,6 +1,6 @@
 # Code Quiz
 
-![Weather Dashboard](./assets/images/screenshot.png)
+[<img src="./assets/images/screenshot.png">](https://kdelaria.github.io/weather-dashboard/)
 Visit the [Weather Dashboard](https://kdelaria.github.io/weather-dashboard/) webpage.
 
 ## Description
