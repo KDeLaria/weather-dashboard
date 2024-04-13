@@ -1,4 +1,4 @@
-const apiKey =  $os.getenv("API_KEY").val();//process.env.API_KEY;
+const apiKey =  process.env.API_KEY;
 const baseUrl = "https://api.openweathermap.org/data/2.5/weather?units=imperial&lang=en&appid=" + apiKey + "&q=";
 const iconUrl = "https://openweathermap.org/img/wn/";
 const iconMedium = "@2x.png";

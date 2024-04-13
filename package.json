@@ -1,0 +1,15 @@
+{
+  "name": "weather-dashboard",
+  "version": "1.0.0",
+  "description": "[<img src=\"./assets/images/screenshot.png\">](https://kdelaria.github.io/weather-dashboard/)\r Visit the [Weather Dashboard](https://kdelaria.github.io/weather-dashboard/) webpage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "KDeLaria",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
